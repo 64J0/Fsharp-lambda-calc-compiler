@@ -98,9 +98,10 @@ let rec eval (expr: Expr) : Expr =
         expr
     | App (expr, arg) ->
         let lambdaVar, lambdaBody = eval expr |> Expr.asAbs
+        let valArg = eval arg
         // \x. x + 1
         // lambdaVar = x, lambdaBody = x + 1
-        Expr.subst lambdaVar arg lambdaBody |> eval
+        Expr.subst lambdaVar valArg lambdaBody |> eval
     | Var _ -> expr
 
 module Ex =
@@ -146,6 +147,21 @@ module Ex =
 
         Abs (var = "f", body = App(expr = innerAbs, arg = innerAbs))
 
+    let eagerFixpoint =
+        // Y = \f . (\x. f (\v. x x v)) (\x. f (x x v))
+
+        let indirection = Abs (
+            "v",
+            App(App(Var "x", Var "x"), Var "v")
+        )
+
+        let innerAbs = Abs (
+            var = "x", 
+            body = App (expr = Var "f", arg = indirection)
+        )
+
+        Abs (var = "f", body = App(expr = innerAbs, arg = innerAbs))
+
     let fibStep =
         // \f. \x if n < 2 then 1 else f (x - 1) + f (x - 2)
         let xMinus n =
@@ -169,5 +185,5 @@ module Ex =
             )
 
     let fib (n: int) =
-        let fn = App (lazyFixpoint, fibStep)
+        let fn = App (eagerFixpoint, fibStep)
         App (fn, lit n)
