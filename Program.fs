@@ -9,4 +9,5 @@ let evalPrint expr =
 
 evalPrint (Lang.Ex.incrApp 42)
 evalPrint (Lang.Ex.addApp 42 31)
+evalPrint (Lang.Ex.subApp 42 31)
 evalPrint (Lang.Ex.fib 5)

@@ -108,6 +108,7 @@ module Ex =
     let lit (n: int) = Lit (BType.Int n)
 
     let incrFn = 
+        // \x. (x + 1)
         Abs(
             var = "x",
             body = Builtin (Arithmetic (Add, Var "x", lit 1))
@@ -116,6 +117,7 @@ module Ex =
     let incrApp (n: int) = App(expr = incrFn, arg = lit n)
 
     let addFn =
+        // \x. (\y. (x + y))
         Abs(
             var = "x",
             body = Abs(
@@ -127,6 +129,7 @@ module Ex =
         App(App(addFn, lit x), lit y)
 
     let subFn =
+        // \x. (\y. (x - y))
         Abs(
             var = "x",
             body = Abs(
@@ -135,7 +138,7 @@ module Ex =
         )
     
     let subApp (x: int) (y: int) =
-        App(App(addFn, lit x), lit y)
+        App(App(subFn, lit x), lit y)
 
     // fib n = if n < 2 then 1 else fib (n - 1) * fib (n - 2)
 
