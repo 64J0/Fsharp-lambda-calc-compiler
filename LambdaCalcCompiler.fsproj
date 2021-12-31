@@ -5,7 +5,12 @@
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <WarningAsErrors>FS0025</WarningAsErrors>
+  </PropertyGroup>
+
   <ItemGroup>
+    <Compile Include="Lang.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
